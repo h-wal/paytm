@@ -1,6 +1,7 @@
 import express from "express";
 import UserModel from "../../packages/db/db";
 import mongoose from "mongoose";
+import bcrypt from "bcrypt"
 
 async function connecttoDb (){
     try{
@@ -46,16 +47,28 @@ async function userExists(req, res, next) {
     next();
 }
 
-app.post('/signup', userExists, (req, res) => {
+app.post('/signup', userExists, async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
 
-    const ha
+    const hashedPassword = await bcrypt.hash(password, 10);
 
+    const createUser = await UserModel.create({
+        userName: username,
+        password: password,
+        email: email
+    })
 
-    
-  res.send('Hello World!')
+    if(createUser){
+        res.send({
+            "message": "User Created"
+        })
+    } else{
+        res.send({
+            "error": createUser
+        })
+    }
 })
 
 app.post('/signin', (req, res) => {
