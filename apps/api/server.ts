@@ -1,5 +1,5 @@
 import express from "express";
-import User from "../../packages/db/db";
+import UserModel from "../../packages/db/db";
 import mongoose from "mongoose";
 
 async function connecttoDb (){
@@ -17,7 +17,52 @@ connecttoDb()
 const app = express()
 const port = 4173
 
-app.get('/signin', (req, res) => {
+async function userExists(req, res, next) {
+
+    const username = req.body.username;
+    const password = req.body.password;
+    const email = req.body.email;
+
+    const userFound = await UserModel.findOne({
+        userName: username
+    })
+
+    if(userFound){
+        res.send({
+            "message": "User with this username already Exists"
+        })
+    }
+
+    const foundEmail = await UserModel.findOne({
+        email: username
+    })
+
+    if(foundEmail){
+        res.send({
+            "message": "User with this email already Exists"
+        })
+    }
+
+    next();
+}
+
+app.post('/signup', userExists, (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const email = req.body.email;
+
+    const ha
+
+
+    
+  res.send('Hello World!')
+})
+
+app.post('/signin', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.get('/profile', (req, res) => {
   res.send('Hello World!')
 })
 
