@@ -9,7 +9,7 @@ async function connecttoDb (){
         console.log("Connection Request to DB Sent");
         await mongoose.connect("mongodb+srv://paytm.lrmv9kf.mongodb.net/%22%20--apiVersion%201%20--username%2023f3000123%20--password%20harsh");
         console.log("Connection Successfull");
-    } catch(e){
+    } catch(e: any){
         console.error("Connection Failed:", e.message);
     }  
 }
@@ -19,6 +19,7 @@ connecttoDb()
 const app = express()
 const port = 4173
 
+//@ts-ignore
 async function userExists(req, res, next) {
 
     const username = req.body.username;
