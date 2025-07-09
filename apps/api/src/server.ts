@@ -1,5 +1,5 @@
 import express from "express";
-import UserModel from "../../packages/db/db";
+import UserModel from "../../../packages/db/src/db";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken";
@@ -22,7 +22,6 @@ const port = 4173
 async function userExists(req, res, next) {
 
     const username = req.body.username;
-    const password = req.body.password;
     const email = req.body.email;
 
     const userFound = await UserModel.findOne({
@@ -36,7 +35,7 @@ async function userExists(req, res, next) {
     }
 
     const foundEmail = await UserModel.findOne({
-        email: username
+        email: email
     })
 
     if(foundEmail){
@@ -72,7 +71,7 @@ app.post('/signup', userExists, async (req, res) => {
     }
 })
 
-app.post('/signin', (req, res) => {
+app.post('/signin', async(req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const email = req.body.email;
@@ -88,7 +87,9 @@ app.post('/signin', (req, res) => {
 
         if(usercheck){
             const username = userFound.userName;
-            const token = await jwt.sign(username, "JWT_SECCRET")
+            const token = await jwt.sign({
+                "username": username
+            }, "JWT_SECCRET")
             res.send({
                 "token": token
             })
@@ -98,24 +99,6 @@ app.post('/signin', (req, res) => {
             })
         }
     }
-    const unhashedPassword = await bcrypt.sign(password, 10);
-
-    const createUser = await UserModel.create({
-        userName: username,
-        password: hashedPassword,
-        email: email
-    })
-
-    if(createUser){
-        res.send({
-            "message": "User Created"
-        })
-    } else{
-        res.send({
-            "error": createUser
-        })
-    }
-})
 })
 
 app.get('/profile', (req, res) => {
