@@ -2,6 +2,7 @@ import express from "express";
 import UserModel from "../../packages/db/db";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken";
 
 async function connecttoDb (){
     try{
@@ -56,7 +57,7 @@ app.post('/signup', userExists, async (req, res) => {
 
     const createUser = await UserModel.create({
         userName: username,
-        password: password,
+        password: hashedPassword,
         email: email
     })
 
@@ -72,7 +73,49 @@ app.post('/signup', userExists, async (req, res) => {
 })
 
 app.post('/signin', (req, res) => {
-  res.send('Hello World!')
+    const username = req.body.username;
+    const password = req.body.password;
+    const email = req.body.email;
+
+    const userFound = await UserModel.findOne({
+        userName: username
+    })
+
+    if (userFound){
+        const hash = userFound.password;
+
+        const usercheck = await bcrypt.compare(password, hash);
+
+        if(usercheck){
+            const username = userFound.userName;
+            const token = await jwt.sign(username, "JWT_SECCRET")
+            res.send({
+                "token": token
+            })
+        } else {
+            res.send({
+                "message": "Invalid Credentials"
+            })
+        }
+    }
+    const unhashedPassword = await bcrypt.sign(password, 10);
+
+    const createUser = await UserModel.create({
+        userName: username,
+        password: hashedPassword,
+        email: email
+    })
+
+    if(createUser){
+        res.send({
+            "message": "User Created"
+        })
+    } else{
+        res.send({
+            "error": createUser
+        })
+    }
+})
 })
 
 app.get('/profile', (req, res) => {
