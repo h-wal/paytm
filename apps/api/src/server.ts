@@ -31,22 +31,24 @@ async function userExists(req, res, next) {
         userName: username
     })
 
-    if(userFound){
-        res.send({
-            "message": "User with this username already Exists"
-        })
-    }
-
     const foundEmail = await UserModel.findOne({
         email: email
     })
 
+    if(userFound){
+        res.send({
+            "message": "User with this username already Exists"
+        });
+        return;
+    }
+
     if(foundEmail){
         res.send({
             "message": "User with this email already Exists"
-        })
+        });
+        return;
     }
-
+    
     next();
 }
 
@@ -102,6 +104,10 @@ app.post('/signin', async(req, res) => {
             })
         }
     }
+    if (!userFound) {
+        res.send({ "message": "User not found" });
+        return;
+    }
 })
 
 app.get('/profile', (req, res) => {
@@ -109,5 +115,5 @@ app.get('/profile', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`app listening on port ${port}`)
 })
