@@ -19,6 +19,8 @@ connecttoDb()
 const app = express()
 const port = 4173
 
+app.use(express.json());
+
 //@ts-ignore
 async function userExists(req, res, next) {
 
@@ -82,7 +84,7 @@ app.post('/signin', async(req, res) => {
     })
 
     if (userFound){
-        const hash = userFound.password;
+        const hash = userFound.password as string;
 
         const usercheck = await bcrypt.compare(password, hash);
 
