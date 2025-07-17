@@ -16,7 +16,7 @@ TransactionRouter.post("/", async (req: Request,res: Response) => {
 
         await session.withTransaction(async() => {
 
-            const toUser = await UserModel.findOne({ username: to }).session(session);
+            const toUser = await UserModel.findOne({ userName: to }).session(session);
             if(!toUser){
                 res.status(401).json({
                     message: "To User Does Not Exist"
@@ -25,9 +25,9 @@ TransactionRouter.post("/", async (req: Request,res: Response) => {
             }
             const ToUserId = toUser._id
 
-            const fromUser = await UserModel.findOne({ username: from}).session(session);
+            const fromUser = await UserModel.findOne({ userName: from}).session(session);
             if(!fromUser){
-                res.send(401).json({
+                res.status(401).json({
                     message: "From User Does Not Exist"
                 })
                 return;
