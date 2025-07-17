@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import signinRouter from "./routes/auth/signin"
 import signupRouter from "./routes/auth/signup"
 import walletRouter from "./routes/wallet/wallet"
-
+import TransactionRouter from "./routes/transactions/transacion";
 async function connecttoDb (){
     try{
         console.log("Connection Request to DB Sent");
@@ -23,6 +23,7 @@ app.use(express.json());
 app.use("/signin", signinRouter)
 app.use("/signup", signupRouter)
 app.use("/wallet", walletRouter)
+app.use("/transactions", TransactionRouter)
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)

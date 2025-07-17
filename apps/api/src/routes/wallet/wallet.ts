@@ -5,9 +5,10 @@ import { UserModel, WalletModel } from "@db/index";
 
 const walletRouter: Router = express.Router();
 
-walletRouter.get("/profile", userauth, async (req: Request, res: Response): Promise<void> => {
+walletRouter.get("/", userauth, async (req: Request, res: Response): Promise<void> => {
     try {
         const userID = req.user;
+        console.log("userId" +userID)
 
         const user = await UserModel.findOne({ _id: userID });
         if (!user) {

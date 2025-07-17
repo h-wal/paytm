@@ -1,25 +1,27 @@
 import express, { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 declare global {
-    namespace Express {
-        interface Request {
-            user?: any;
-        }
+  namespace Express {
+    interface Request {
+      user?: any;
     }
+  }
 }
 
-export default function userauth(req: Request, res: Response, next: NextFunction){
-    const token = req.body.headers;
-    const userDetails = jwt.verify(token, "JWT_SECRET", (err: any, decoded: any) => {
-        console.log(err)
-        if(err){
-            return res.status(401).json({
-                error: "Invalid User"
-            })
-        }
-        req.user = decoded;
-        
-    })
+export default function userauth(req: Request, res: Response, next: NextFunction):any {
+  const token = req.headers.authorization; // Extract token from "Bearer <token>"
 
+  if (!token) {
+    return res.status(401).json({ error: "Authorization token missing" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "JWT_SECCRET"); // Replace with process.env.JWT_SECRET in prod
+    //@ts-ignore
+    req.user = decoded.userId;
+    next(); // Proceed to the next middleware/controller
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid token" });
+  }
 }
