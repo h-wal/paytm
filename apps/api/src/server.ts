@@ -1,8 +1,7 @@
 import express from "express";
-import UserModel from "@db/db";
-import mongoose from "mongoose";
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken";
+import mongoose from "mongoose";    
+import signinRouter from "./routes/auth/signin"
+import signupRouter from "./routes/auth/signup"
 
 async function connecttoDb (){
     try{
@@ -15,104 +14,14 @@ async function connecttoDb (){
 }
 
 connecttoDb()
-
 const app = express()
 const port = 4173
 
 app.use(express.json());
 
-//@ts-ignore
-async function userExists(req, res, next) {
+app.use("/signin", signinRouter);
+app.use("/signup", signupRouter)
 
-    const username = req.body.username;
-    const email = req.body.email;
-
-    const userFound = await UserModel.findOne({
-        userName: username
-    })
-
-    const foundEmail = await UserModel.findOne({
-        email: email
-    })
-
-    if(userFound){
-        res.send({
-            "message": "User with this username already Exists"
-        });
-        return;
-    }
-
-    if(foundEmail){
-        res.send({
-            "message": "User with this email already Exists"
-        });
-        return;
-    }
-    
-    next();
-}
-
-app.post('/signup', userExists, async (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    const email = req.body.email;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const createUser = await UserModel.create({
-        userName: username,
-        password: hashedPassword,
-        email: email
-    })
-
-    if(createUser){
-        res.send({
-            "message": "User Created"
-        })
-    } else{
-        res.send({
-            "error": createUser
-        })
-    }
-})
-
-app.post('/signin', async(req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    const email = req.body.email;
-
-    const userFound = await UserModel.findOne({
-        userName: username
-    })
-
-    if (userFound){
-        const hash = userFound.password as string;
-
-        const usercheck = await bcrypt.compare(password, hash);
-
-        if(usercheck){
-            const username = userFound.userName;
-            const token = await jwt.sign({
-                "username": username
-            }, "JWT_SECCRET")
-            res.send({
-                "token": token
-            })
-        } else {
-            res.send({
-                "message": "Invalid Credentials"
-            })
-        }
-    }
-    if (!userFound) {
-        res.send({ "message": "User not found" });
-        return;
-    }
-})
-
-app.get('/profile', (req, res) => {
-  res.send('Hello World!')
-})
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)
