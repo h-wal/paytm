@@ -12,6 +12,7 @@ declare global {
 export default function userauth(req: Request, res: Response, next: NextFunction){
     const token = req.body.headers;
     const userDetails = jwt.verify(token, "JWT_SECRET", (err: any, decoded: any) => {
+        console.log(err)
         if(err){
             return res.status(401).json({
                 error: "Invalid User"

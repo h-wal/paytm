@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";    
 import signinRouter from "./routes/auth/signin"
 import signupRouter from "./routes/auth/signup"
+import walletRouter from "./routes/wallet/wallet"
 
 async function connecttoDb (){
     try{
@@ -19,9 +20,9 @@ const port = 4173
 
 app.use(express.json());
 
-app.use("/signin", signinRouter);
+app.use("/signin", signinRouter)
 app.use("/signup", signupRouter)
-
+app.use("/wallet", walletRouter)
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`)

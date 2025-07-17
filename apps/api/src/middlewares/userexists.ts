@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import UserModel from "@db/db";
+import { UserModel } from "@db/index";
 
 async function userExists(req: Request, res: Response, next: NextFunction) {
 
