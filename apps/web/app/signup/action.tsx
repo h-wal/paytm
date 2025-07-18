@@ -1,4 +1,5 @@
 'use server'
+import  {redirect}  from 'next/navigation';
 import axios from 'axios';
 
 export default async function submitForm(formData: FormData) {
@@ -6,22 +7,11 @@ export default async function submitForm(formData: FormData) {
   const email = formData.get('email');
   const password = formData.get('password');
 
-  const response = await axios.post('http://localhost:4000/api/signup', {
+  const response = await axios.post('http://localhost:4173/signup', {
     username,
     email,
     password
   });
 
-    if (response) {
-        return {
-        success: true,
-        message: 'User created successfully'
-        }
-    }
-    else{
-        return {
-        success: false,
-        message: 'User creation failed'
-        }
-    }
+  redirect("/signin")
 }

@@ -23,7 +23,7 @@ export default function PaytmLanding() {
       <div className="w-1/2 bg-white text-[#012970] flex justify-center items-center p-12">
         <div className="w-full max-w-sm">
           <h2 className="text-2xl font-bold mb-6 text-center">Welcome Back</h2>
-          <form className="space-y-5">
+          <form action={signInAction()} className="space-y-5">
             <div>
               <label className="block text-sm font-medium mb-1">Email</label>
               <input

@@ -2,6 +2,7 @@
 import Image from "next/image";
 import logo from '../public/logo.png'; 
 import submitform from './action';
+import { NavigateAction } from "next/dist/client/components/router-reducer/router-reducer-types";
 
 export default function PaytmSignup() {
   return (
@@ -25,9 +26,7 @@ export default function PaytmSignup() {
       <div className="w-1/2 bg-white text-[#012970] flex justify-center items-center p-12">
         <div className="w-full max-w-sm">
           <h2 className="text-2xl font-bold mb-6 text-center">Create Your Account</h2>
-          <form action={async (formData) => {
-            const res = await submitform(formData);
-          }} className="space-y-5">
+          <form action={submitform} className="space-y-5">
             <div>
               <label className="block text-sm font-medium mb-1">Full Name</label>
               <input
