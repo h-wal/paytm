@@ -8,7 +8,7 @@ import { useActionState } from "react";
 const initialState = {
   //@ts-ignore
   success: false,
-  message: ""
+  message: "Invalid User"
 }
 
 export default function PaytmLanding() {
@@ -47,6 +47,7 @@ export default function PaytmLanding() {
             <div>
               <label className="block text-sm font-medium mb-1">Password</label>
               <input
+                name="password"
                 type="password"
                 className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#00baf2]"
                 placeholder="••••••••"

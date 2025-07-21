@@ -13,7 +13,7 @@ import { redirect } from "next/navigation";
         password
     })
 
-    if(response.status === 200){
+    if(response){
         redirect("/wallet")
     }
     else{
