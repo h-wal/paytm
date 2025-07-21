@@ -8,7 +8,7 @@ export default function Home() {
         </p>
         <div className="flex gap-4">
           <a
-            href="/signin"
+            href="/auth/signin"
             className="bg-white text-[#00baf2] px-6 py-2 border border-[#00baf2] rounded font-medium hover:bg-[#e6f7fb] transition"
           >
             Login
@@ -21,7 +21,7 @@ export default function Home() {
           </a> */}
         </div>
         <p className="text-sm text-[#012970] mt-6">
-          New user? <a href="/signup" className="text-[#00baf2] font-medium hover:underline">Create an account</a>
+          New user? <a href="/auth/signup" className="text-[#00baf2] font-medium hover:underline">Create an account</a>
         </p>
       </div>
     </div>

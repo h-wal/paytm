@@ -7,25 +7,24 @@ import { Request, Response, Router } from "express";
 const signinRouter: Router = express.Router();
 
 async function signinrequest(req: Request, res: Response){
-    const username = req.body.username;
-    const password = req.body.password;
     const email = req.body.email;
+    const password = req.body.password;
 
     const userFound = await UserModel.findOne({
-        userName: username
+        email: email
     })
 
     if (userFound){
-        const hash = userFound.password as string;
+        const hash = await userFound.password as string;
 
         const usercheck = await bcrypt.compare(password, hash);
 
         if(usercheck){
             const userId = userFound._id;
-            const token = await jwt.sign({
+            const token = jwt.sign({
                 "userId": userId
             }, "JWT_SECCRET")
-            res.send({
+            res.status(200).send({
                 "token": token
             })
         } else {

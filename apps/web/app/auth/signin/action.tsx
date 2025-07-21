@@ -2,19 +2,18 @@
 import axios from "axios";
 import { redirect } from "next/navigation";
 
-    export default async function signInAction(formData: FormData){
-    const username = formData.get('username');
+    export default async function signInAction(prevState: any, formData: FormData): Promise<{success: boolean, message: string}> {
+    const email = formData.get('email');
     const password = formData.get('password');
 
-    const response = await axios.post('http://localhost:4000/signin', {
-        username,
+    console.log(email, password)
+    
+    const response = await axios.post('http://localhost:4173/signin', {
+        email,
         password
     })
+
     if(response.status === 200){
-        return {
-            success: true,
-            message: "User signed in successfully"
-        }
         redirect("/wallet")
     }
     else{
@@ -22,6 +21,5 @@ import { redirect } from "next/navigation";
             success: false,
             message: "User not signed in"
         }
-        redirect("/signin")
     }   
 }

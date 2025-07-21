@@ -1,14 +1,22 @@
+"use client"
+import Ptmlogo from "../../public/logo"
+import Image from "next/image"
+import logo from '../../public/logo.png'; 
+import signInAction from "./action";
+import { useActionState } from "react";
 
-import Image from "next/image";
-import logo from '../public/logo.png'; 
-import submitform from './action';
-import { NavigateAction } from "next/dist/client/components/router-reducer/router-reducer-types";
+const initialState = {
+  //@ts-ignore
+  success: false,
+  message: ""
+}
 
-export default function PaytmSignup() {
+export default function PaytmLanding() {
+  //@ts-ignore
+  const [state, formAction] = useActionState(signInAction, initialState)
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-[#012970] to-[#001f4d] text-white font-sans">
-      
-      {/* Left Section - Reused */}
+      {/* Left Section */}
       <div className="w-1/2 flex flex-col justify-center items-center p-12">
         <div>
           <Image
@@ -22,19 +30,11 @@ export default function PaytmSignup() {
         </h1>
       </div>
 
-      {/* Right Section - Signup Form */}
+      {/* Right Section - Auth */}
       <div className="w-1/2 bg-white text-[#012970] flex justify-center items-center p-12">
         <div className="w-full max-w-sm">
-          <h2 className="text-2xl font-bold mb-6 text-center">Create Your Account</h2>
-          <form action={submitform} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium mb-1">Full Name</label>
-              <input
-                name="username"
-                className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#00baf2]"
-                placeholder="username"
-              />
-            </div>
+          <h2 className="text-2xl font-bold mb-6 text-center">Welcome Back</h2>
+          <form action={formAction} className="space-y-5">
             <div>
               <label className="block text-sm font-medium mb-1">Email</label>
               <input
@@ -47,7 +47,6 @@ export default function PaytmSignup() {
             <div>
               <label className="block text-sm font-medium mb-1">Password</label>
               <input
-                name="password"
                 type="password"
                 className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#00baf2]"
                 placeholder="••••••••"
@@ -55,17 +54,19 @@ export default function PaytmSignup() {
             </div>
             <button
               type="submit"
-              className="w-full bg-[#00baf2] text-white font-medium py-2 rounded hover:bg-[#00a6d6] hover:cursor-pointer"
+              className="w-full bg-[#00baf2] text-white font-medium py-2 rounded hover:bg-[#00a6d6] transition"
             >
-              Sign Up
+              Login
             </button>
             <p className="text-center text-sm mt-4">
-              Already have an account?{" "}
-              <a href="/" className="text-[#00baf2] font-medium hover:underline">Login</a>
+              New to Paytm? <a href="/auth/signup" className="text-[#00baf2] font-medium hover:underline">Sign Up</a>
             </p>
           </form>
+          <div className="flex justify-center">
+              {state.success && <p>{state.message}</p>}
+          </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

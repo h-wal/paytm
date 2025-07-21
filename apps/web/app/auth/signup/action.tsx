@@ -2,7 +2,7 @@
 import  {redirect}  from 'next/navigation';
 import axios from 'axios';
 
-export default async function submitForm(formData: FormData) {
+export async function submitForm(formData: FormData) {
   const username = formData.get('username');
   const email = formData.get('email');
   const password = formData.get('password');
@@ -13,5 +13,5 @@ export default async function submitForm(formData: FormData) {
     password
   });
 
-  redirect("/signin")
+  redirect("/auth/signin")
 }
