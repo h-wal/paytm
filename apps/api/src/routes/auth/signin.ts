@@ -15,7 +15,7 @@ async function signinrequest(req: Request, res: Response){
     })
 
     if (userFound){
-        const hash = await userFound.password as string;
+        const hash = userFound.password as string;
 
         const usercheck = await bcrypt.compare(password, hash);
 
@@ -28,13 +28,13 @@ async function signinrequest(req: Request, res: Response){
                 "token": token
             })
         } else {
-            res.send({
+            res.status(401).send({
                 "message": "Invalid Credentials"
             })
         }
     }
     if (!userFound) {
-        res.send({ "message": "User not found" });
+        res.status(401).send({ "message": "User not found" });
         return;
     }
 }

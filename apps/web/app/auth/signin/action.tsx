@@ -13,6 +13,8 @@ import { redirect } from "next/navigation";
         password
     })
 
+    console.log(response)
+    
     if(response){
         redirect("/wallet")
     }
